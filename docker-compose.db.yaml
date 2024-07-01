@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: always
+    expose:
+      - 6379
+    ports:
+      - "6379:6379"
+
+  mongodb:
+    image : mongo:latest
+    container_name: mongodb
+    environment:
+      - MONGO_INITDB_DATABASE=mongo_db
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+    volumes:
+      - mongodb-volume:/data/db
+    expose:
+      - 27017
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongodb-volume:
+  postgres-volume:
