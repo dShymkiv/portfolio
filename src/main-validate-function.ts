@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi = require('joi');
 
+import { BadRequest } from '../errors/api-errors';
+
 export interface IRequestSchema {
     body?: Joi.ObjectSchema
     query?: Joi.ObjectSchema
@@ -36,7 +38,7 @@ export const getErrorMessage = (req: Request, schema: IRequestSchema) => {
 export const validate = (schema: IRequestSchema) => {
     return (req: Request, _: Response, next: NextFunction) => {
         const { message, value } = getErrorMessage(req, schema);
-        if (message) return next({ httpCode: 400, userMessage: message });
+        if (message) throw new BadRequest(message);
 
         // Pass default values specified in Joi schema to request object
         Object.assign(req, value);
